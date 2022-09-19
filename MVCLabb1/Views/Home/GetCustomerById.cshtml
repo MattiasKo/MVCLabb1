@@ -1,0 +1,23 @@
+﻿@using MVCLabb1.Models
+@model Customer
+@{
+    ViewData["Title"] = "Customer Detail";
+}
+
+<h1>Costumer details</h1>
+<div class="row">
+
+        <p>ID:@Html.DisplayFor(model => model.CostumerId)
+        <br>FirstName: @Html.DisplayFor(model => model.FirstName)
+        <br>LastName: @Html.DisplayFor(model => model.LastName)
+        <br>Phonenumber: @Html.DisplayFor(model => model.Phone)
+        </p>
+    <a asp-controller="Home" asp-action="UpdateCustomer" asp-route-id="@Model.CostumerId" class="btn btn-primary">Edit</a>
+    <form asp-action="Delete" asp-route-id="@Model.CostumerId">
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure to delete this Customer?')">
+            Delete
+        </button>
+
+    </form>
+
+</div>

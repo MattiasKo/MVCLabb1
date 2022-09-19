@@ -1,0 +1,22 @@
+﻿@using MVCLabb1.Models
+@model IEnumerable<Book>
+<h1>Böcker som finns att låna</h1>
+
+<div class="row">
+
+@foreach (var item in Model)
+{
+            <div class="col-lg-3 col-md-3 col-xs-3 thumb">
+                <img src="@Url.Content(@item.BookPictureUrl)" width="200" height="200" />
+                <p>Titel: @item.Title</p> 
+                <p>ISBN: @item.BookISBN</p>
+                <p>Antal i lager: @item.AmountInStore</p>
+                <p>
+
+
+                <a asp-controller="Home" asp-action="Books" asp-route-Id="@Context.GetRouteData().Values["Id"]" asp-route-BookId="@item.Id" class="btn btn-primary">Borrow</a>
+
+                </p>
+    </div>
+}
+</div>

@@ -1,0 +1,32 @@
+﻿@using MVCLabb1.Models
+@model IEnumerable<Customer>
+<h1>Costumers</h1>
+@foreach(var item in Model){
+    <div class="container">
+   
+
+   
+            
+               
+                    <div class="row-">
+
+                <a asp-controller="Home" asp-action="GetCustomerById" asp-route-id="@item.CostumerId" class="btn btn-info">Details</a>
+                    
+                   
+                <a asp-controller="Home" asp-action="UpdateCustomer" asp-route-id="@item.CostumerId" class="btn btn-primary">Edit</a>
+                   
+                    
+                <form asp-action="Delete" asp-route-id="@item.CostumerId">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure to delete this Customer?')">
+                        Delete
+                    </button>
+
+                </form>
+            @item.FirstName @item.LastName Phonenumber: @item.Phone
+            <a asp-controller="Home" asp-action="Books" asp-route-id="@item.CostumerId" class="btn btn-info">Select</a>
+                </div>
+            </div>
+
+    
+
+}
