@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MVCLabb1.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
@@ -38,39 +39,47 @@ namespace MVCLabb1.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-       
 
-        [Route("Home/Books/{Id:int}/{BookId:int}")]
-        [HttpPost]
+        //[HttpPost]
+        //[Route("{Id:int}/{BookId:int}")]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Books([FromRoute] int BookId)
+        public async Task<IActionResult> BookBorrow(int Id, int BookId)
         {
-            Book amount = await _bookBorrowDbContext.Books.FindAsync(BookId);
-            amount.AmountInStore -= 1;
-            _bookBorrowDbContext.Books.Update(amount);
-            await _bookBorrowDbContext.SaveChangesAsync();
-            return Ok("Book amount changed");
-            //var bookamount =  _bookBorrowDbContext.Books.Find(BookId);
-            //if(bookamount == null)
-            //{
-            //    return NotFound("Error");
-            //}
-            //bookamount.AmountInStore = -1;
-            //_bookBorrowDbContext.Books.Update(bookamount);
+            
+            var bookamount = _bookBorrowDbContext.Books.Find(BookId);
+            if (bookamount == null)
+            {
+                return NotFound("Book not found.");
+            }
+            bookamount.AmountInStore -= 1;
+            _bookBorrowDbContext.Books.Update(bookamount);
 
-            //if (Id != 0 && BookId != 0)
-            //{
-            //    BookBorrowCustomer borrower = new BookBorrowCustomer
-            //    {
-            //        CostumerId = Id,
-            //        BookId = BookId,
-            //        ReturnDate = DateTime.Now,
-            //    };
-            //    _bookBorrowDbContext.BookBorrowCustomers.Add(borrower);
-            //    await _bookBorrowDbContext.SaveChangesAsync();
-            //    return Ok("The book is borrowed");
-            //}
-            //return NotFound("Error");
+            if (Id != 0 && BookId != 0)
+            {
+                int latestId = 0;
+                int latestCheck = 0;
+
+                do
+                {                 
+                    var latstBorrower = await _bookBorrowDbContext.BookBorrowCustomers.FirstOrDefaultAsync(c => c.BorrowId == latestId);                   
+                    if (latestId == latstBorrower.BorrowId) 
+                    {
+                        latestId += 1;
+                    }
+                } while (latestCheck == latestId);
+
+                    BookBorrowCustomer borrower = new BookBorrowCustomer
+                {
+                    BorrowId = latestId,
+                    CostumerId = Id,
+                    BookId = BookId,
+                    ReturnDate = DateTime.Now,
+                };
+                _bookBorrowDbContext.BookBorrowCustomers.Add(borrower);
+                await _bookBorrowDbContext.SaveChangesAsync();
+                return RedirectToAction("Books");
+            }
+            return NotFound("Error book and user not found.");
 
         }
         [HttpPost, ActionName("Delete")]

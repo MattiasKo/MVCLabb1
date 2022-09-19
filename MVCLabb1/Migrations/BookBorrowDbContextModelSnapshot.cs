@@ -36,6 +36,9 @@ namespace MVCLabb1.Migrations
                     b.Property<int?>("BookBorrowCustomerBookId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("BookBorrowCustomerBorrowId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("BookBorrowCustomerCostumerId")
                         .HasColumnType("int");
 
@@ -53,7 +56,7 @@ namespace MVCLabb1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookBorrowCustomerCostumerId", "BookBorrowCustomerBookId");
+                    b.HasIndex("BookBorrowCustomerBorrowId", "BookBorrowCustomerCostumerId", "BookBorrowCustomerBookId");
 
                     b.ToTable("Books");
 
@@ -102,6 +105,9 @@ namespace MVCLabb1.Migrations
 
             modelBuilder.Entity("MVCLabb1.Models.BookBorrowCustomer", b =>
                 {
+                    b.Property<int>("BorrowId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CostumerId")
                         .HasColumnType("int");
 
@@ -111,33 +117,39 @@ namespace MVCLabb1.Migrations
                     b.Property<DateTime>("ReturnDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("CostumerId", "BookId");
+                    b.HasKey("BorrowId", "CostumerId", "BookId");
 
                     b.HasIndex("BookId");
+
+                    b.HasIndex("CostumerId");
 
                     b.ToTable("BookBorrowCustomers");
 
                     b.HasData(
                         new
                         {
+                            BorrowId = 0,
                             CostumerId = 1,
                             BookId = 1,
                             ReturnDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
+                            BorrowId = 1,
                             CostumerId = 1,
                             BookId = 2,
                             ReturnDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
+                            BorrowId = 2,
                             CostumerId = 3,
                             BookId = 4,
                             ReturnDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
+                            BorrowId = 3,
                             CostumerId = 3,
                             BookId = 2,
                             ReturnDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -153,6 +165,9 @@ namespace MVCLabb1.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CostumerId"), 1L, 1);
 
                     b.Property<int?>("BookBorrowCustomerBookId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BookBorrowCustomerBorrowId")
                         .HasColumnType("int");
 
                     b.Property<int?>("BookBorrowCustomerCostumerId")
@@ -173,7 +188,7 @@ namespace MVCLabb1.Migrations
 
                     b.HasKey("CostumerId");
 
-                    b.HasIndex("BookBorrowCustomerCostumerId", "BookBorrowCustomerBookId");
+                    b.HasIndex("BookBorrowCustomerBorrowId", "BookBorrowCustomerCostumerId", "BookBorrowCustomerBookId");
 
                     b.ToTable("Costumers");
 
@@ -205,7 +220,7 @@ namespace MVCLabb1.Migrations
                 {
                     b.HasOne("MVCLabb1.Models.BookBorrowCustomer", null)
                         .WithMany("BookViewModel")
-                        .HasForeignKey("BookBorrowCustomerCostumerId", "BookBorrowCustomerBookId");
+                        .HasForeignKey("BookBorrowCustomerBorrowId", "BookBorrowCustomerCostumerId", "BookBorrowCustomerBookId");
                 });
 
             modelBuilder.Entity("MVCLabb1.Models.BookBorrowCustomer", b =>
@@ -230,8 +245,8 @@ namespace MVCLabb1.Migrations
             modelBuilder.Entity("MVCLabb1.Models.Customer", b =>
                 {
                     b.HasOne("MVCLabb1.Models.BookBorrowCustomer", null)
-                        .WithMany("CustoimerViewModel")
-                        .HasForeignKey("BookBorrowCustomerCostumerId", "BookBorrowCustomerBookId");
+                        .WithMany("CustomerViewModel")
+                        .HasForeignKey("BookBorrowCustomerBorrowId", "BookBorrowCustomerCostumerId", "BookBorrowCustomerBookId");
                 });
 
             modelBuilder.Entity("MVCLabb1.Models.Book", b =>
@@ -243,7 +258,7 @@ namespace MVCLabb1.Migrations
                 {
                     b.Navigation("BookViewModel");
 
-                    b.Navigation("CustoimerViewModel");
+                    b.Navigation("CustomerViewModel");
                 });
 
             modelBuilder.Entity("MVCLabb1.Models.Customer", b =>

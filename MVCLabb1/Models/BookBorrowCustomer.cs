@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -6,6 +7,10 @@ namespace MVCLabb1.Models
 {
     public class BookBorrowCustomer
     {
+       
+        [Key]
+        public int BorrowId { get; set; }
+       
 
         [ForeignKey("CostumerId")]
         public int CostumerId { get; set; }

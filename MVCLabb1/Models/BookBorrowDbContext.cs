@@ -15,6 +15,7 @@ namespace MVCLabb1.Models
         {
             modelBuilder.Entity<BookBorrowCustomer>().HasKey(bk => new
             {
+                bk.BorrowId,
                 bk.CostumerId,
                 bk.BookId
             });
@@ -93,24 +94,25 @@ namespace MVCLabb1.Models
             });
             modelBuilder.Entity<BookBorrowCustomer>().HasData(new BookBorrowCustomer
             {
-        
+                BorrowId = 0,
                 BookId = 1,
                 CostumerId = 1
             });
             modelBuilder.Entity<BookBorrowCustomer>().HasData(new BookBorrowCustomer
             {
-               
+                BorrowId = 1,
                 BookId = 2,
                 CostumerId = 1
             });
             modelBuilder.Entity<BookBorrowCustomer>().HasData(new BookBorrowCustomer
             {
+                BorrowId = 2,
                 BookId = 4,
                 CostumerId = 3
             });
             modelBuilder.Entity<BookBorrowCustomer>().HasData(new BookBorrowCustomer
             {
-              
+                BorrowId = 3,
                 BookId = 2,
                 CostumerId = 3
             });
