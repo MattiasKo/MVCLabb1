@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MVCLabb1.Migrations
 {
-    public partial class keyvaluesadded : Migration
+    public partial class nullable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,7 +16,9 @@ namespace MVCLabb1.Migrations
                     BorrowId = table.Column<int>(type: "int", nullable: false),
                     CostumerId = table.Column<int>(type: "int", nullable: false),
                     BookId = table.Column<int>(type: "int", nullable: false),
-                    ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ReturnedToLibrary = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Returned = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -56,6 +58,7 @@ namespace MVCLabb1.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Phone = table.Column<int>(type: "int", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     BookBorrowCustomerBookId = table.Column<int>(type: "int", nullable: true),
                     BookBorrowCustomerBorrowId = table.Column<int>(type: "int", nullable: true),
                     BookBorrowCustomerCostumerId = table.Column<int>(type: "int", nullable: true)
@@ -75,32 +78,34 @@ namespace MVCLabb1.Migrations
                 columns: new[] { "Id", "AmountInStore", "BookBorrowCustomerBookId", "BookBorrowCustomerBorrowId", "BookBorrowCustomerCostumerId", "BookISBN", "BookPictureUrl", "Title" },
                 values: new object[,]
                 {
-                    { 1, 1, null, null, null, "23468635", "https://papunet.net/sites/papunet.net/files/kuvapankki/20190807/kirja_vari.jpg", "Entity kursbook" },
+                    { 1, 3, null, null, null, "23468635", "https://papunet.net/sites/papunet.net/files/kuvapankki/20190807/kirja_vari.jpg", "Entity kursbook" },
                     { 2, 1, null, null, null, "112323", "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcT3yGr3_kAc0rzeCubEwS6odjfOrhQ6r5f26LJZ7QVzqmojcvcR", "advancerad Asp.net" },
                     { 3, 2, null, null, null, "12341233", "https://s2.adlibris.com/images/41587515/sql-in-10-minutes-a-day-sams-teach-yourself.jpg", "sql server programmering" },
                     { 4, 20, null, null, null, "32412", "https://s2.adlibris.com/images/768665/beginning-aspnet-mvc-4.jpg", "MVC model view controller" },
-                    { 5, 1, null, null, null, "263563", "https://s1.adlibris.com/images/30710334/programmering-2-c.jpg", "C# programmering" }
+                    { 5, 5, null, null, null, "263563", "https://s1.adlibris.com/images/30710334/programmering-2-c.jpg", "C# programmering" },
+                    { 6, 5, null, null, null, "26253563", "https://s1.adlibris.com/images/61264615/microsoft-visual-c-step-by-step.jpg", "microsoft-visual-c" },
+                    { 7, 7, null, null, null, "11113563", "https://s2.adlibris.com/images/27997673/programming-aspnet-core.jpg", "programming aspnet core" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Costumers",
-                columns: new[] { "CostumerId", "BookBorrowCustomerBookId", "BookBorrowCustomerBorrowId", "BookBorrowCustomerCostumerId", "FirstName", "LastName", "Phone" },
+                columns: new[] { "CostumerId", "BookBorrowCustomerBookId", "BookBorrowCustomerBorrowId", "BookBorrowCustomerCostumerId", "Email", "FirstName", "LastName", "Phone" },
                 values: new object[,]
                 {
-                    { 1, null, null, null, "Mattias", "Kokkonen", 70555555 },
-                    { 2, null, null, null, "Edwin", "Noccomannen", 70444444 },
-                    { 3, null, null, null, "Daniel", "Vandraren", 7033333 }
+                    { 1, null, null, null, "mattias@gmail.com", "Mattias", "Kokkonen", 70555555 },
+                    { 2, null, null, null, "Nocco@nocco.com", "Edwin", "Noccomannen", 70444444 },
+                    { 3, null, null, null, "vandra@vandra.se", "Daniel", "Vandraren", 7033333 }
                 });
 
             migrationBuilder.InsertData(
                 table: "BookBorrowCustomers",
-                columns: new[] { "BookId", "BorrowId", "CostumerId", "ReturnDate" },
+                columns: new[] { "BookId", "BorrowId", "CostumerId", "ReturnDate", "Returned", "ReturnedToLibrary" },
                 values: new object[,]
                 {
-                    { 1, 0, 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 2, 1, 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 4, 2, 3, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 2, 3, 3, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { 1, 1, 1, new DateTime(2008, 3, 1, 7, 0, 0, 0, DateTimeKind.Unspecified), false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, 2, 1, new DateTime(2018, 3, 1, 7, 0, 0, 0, DateTimeKind.Unspecified), false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 4, 3, 2, new DateTime(2022, 9, 1, 7, 0, 0, 0, DateTimeKind.Unspecified), false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, 4, 3, new DateTime(2022, 9, 22, 17, 47, 49, 324, DateTimeKind.Local).AddTicks(4824), false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.CreateIndex(

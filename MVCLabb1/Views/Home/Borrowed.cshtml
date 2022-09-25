@@ -1,0 +1,38 @@
+﻿@using MVCLabb1
+@model dynamic
+@{
+    ViewBag.Title = "Borrowed books";
+    var TheCustomerId = ViewContext.RouteData.Values["id"];
+}
+
+<div class="row">
+    <p>
+
+        @foreach (Book book in Model.Book)
+        {
+            @foreach (BookBorrowCustomer cust in Model.BorrowCust)
+            {
+                if (cust.BookId == book.Id)
+                {
+                    <div class="col-lg-3 col-md-3 col-xs-3 thumb">
+                        <img src="@Url.Content(book.BookPictureUrl)" width="200" height="200" />
+                        <p>Titel: @book.Title</p>
+                        <p>ISBN: @book.BookISBN</p>
+                        @if (cust.Returned == false)
+                        {
+                            <p>Borrow time to @cust.ReturnDate.ToString("yyyy-MM-dd")</p>
+                            <p><a asp-controller="Home" asp-action="ReturnBook" asp-route-Id="@Context.GetRouteData().Values["Id"]" asp-route-BookId="@book.Id" asp-route-BorrowId="@cust.BorrowId" class="btn btn-warning">Return</a></p>
+                        }
+                        @if (cust.Returned == true){
+                            <h4>Returned</h4>
+                            <p>Returned at: @cust.ReturnedToLibrary.ToString("yyyy-MM-dd")</p>
+                        }
+                    </div>
+                }
+            }
+
+        }
+       
+
+       
+    </div>

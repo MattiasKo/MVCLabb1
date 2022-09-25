@@ -31,7 +31,7 @@ namespace MVCLabb1.Models
                 Id = 1,
                 Title = "Entity kursbook",
                 BookISBN = "23468635",
-                AmountInStore=1,
+                AmountInStore=3,
                 BookPictureUrl= "https://papunet.net/sites/papunet.net/files/kuvapankki/20190807/kirja_vari.jpg"
 
             });
@@ -65,15 +65,33 @@ namespace MVCLabb1.Models
                 Id = 5,
                 Title = "C# programmering",
                 BookISBN = "263563",
-                AmountInStore = 1,
+                AmountInStore = 5,
                 BookPictureUrl= "https://s1.adlibris.com/images/30710334/programmering-2-c.jpg"
+            });
+        
+            modelBuilder.Entity<Book>().HasData(new Book
+            {
+                Id = 6,
+                Title = "microsoft-visual-c",
+                BookISBN = "26253563",
+                AmountInStore = 5,
+                BookPictureUrl = "https://s1.adlibris.com/images/61264615/microsoft-visual-c-step-by-step.jpg"
+            });
+            modelBuilder.Entity<Book>().HasData(new Book
+            {
+                Id = 7,
+                Title = "programming aspnet core",
+                BookISBN = "11113563",
+                AmountInStore = 7,
+                BookPictureUrl = "https://s2.adlibris.com/images/27997673/programming-aspnet-core.jpg"
             });
             modelBuilder.Entity<Customer>().HasData(new Customer
             {
                 CostumerId = 1,
                 FirstName = "Mattias",
                 LastName = "Kokkonen",
-                Phone = 070555555
+                Phone = 070555555,
+                Email = "mattias@gmail.com"
 
             });
             modelBuilder.Entity<Customer>().HasData(new Customer
@@ -81,7 +99,8 @@ namespace MVCLabb1.Models
                 CostumerId = 2,
                 FirstName = "Edwin",
                 LastName = "Noccomannen",
-                Phone = 070444444
+                Phone = 070444444,
+                Email ="Nocco@nocco.com"
 
             });
             modelBuilder.Entity<Customer>().HasData(new Customer
@@ -89,32 +108,37 @@ namespace MVCLabb1.Models
                 CostumerId = 3,
                 FirstName = "Daniel",
                 LastName = "Vandraren",
-                Phone = 07033333
+                Phone = 07033333,
+                Email = "vandra@vandra.se"
 
             });
             modelBuilder.Entity<BookBorrowCustomer>().HasData(new BookBorrowCustomer
             {
-                BorrowId = 0,
-                BookId = 1,
-                CostumerId = 1
-            });
-            modelBuilder.Entity<BookBorrowCustomer>().HasData(new BookBorrowCustomer
-            {
                 BorrowId = 1,
-                BookId = 2,
-                CostumerId = 1
+                BookId = 1,
+                CostumerId = 1,
+                ReturnDate = new DateTime(2008, 3, 1, 7, 0, 0)
             });
             modelBuilder.Entity<BookBorrowCustomer>().HasData(new BookBorrowCustomer
             {
                 BorrowId = 2,
-                BookId = 4,
-                CostumerId = 3
+                BookId = 2,
+                CostumerId = 1,
+                ReturnDate = new DateTime(2018, 3, 1, 7, 0, 0)
             });
             modelBuilder.Entity<BookBorrowCustomer>().HasData(new BookBorrowCustomer
             {
                 BorrowId = 3,
+                BookId = 4,
+                CostumerId = 2,
+                ReturnDate = new DateTime(2022, 9, 1, 7, 0, 0)
+            });
+            modelBuilder.Entity<BookBorrowCustomer>().HasData(new BookBorrowCustomer
+            {
+                BorrowId = 4,
                 BookId = 2,
-                CostumerId = 3
+                CostumerId = 3,
+                ReturnDate = DateTime.Now
             });
         }
     }

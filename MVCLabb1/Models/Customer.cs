@@ -8,7 +8,7 @@ namespace MVCLabb1.Models
     public class Customer
     {
         [Key]
-        public int CostumerId { get; set; }
+        public int? CostumerId { get; set; }
 
         [Required(ErrorMessage ="FirstName is required")]
         [Column(TypeName = "nvarchar(25)")]
@@ -20,7 +20,7 @@ namespace MVCLabb1.Models
         [Required(ErrorMessage = "Lastname is required")]
         [Column(TypeName = "nvarchar(50)")]
         [DisplayName("LastName")]
-        [MaxLength(50, ErrorMessage = "Name cant be longer than 50 characters")]
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "Name cant be longer than 50 characters or less than 3 characters")]
         public string LastName { get; set; }
         
         
@@ -29,7 +29,12 @@ namespace MVCLabb1.Models
         [DisplayName("Phone")]
 
         public int Phone { get; set; }
-        public List<BookBorrowCustomer> Customer_Borrow { get; set; }
+        [Required(ErrorMessage = "Email adress is required")]
+        [DisplayName("Email")]
+        [Column(TypeName = "nvarchar(50)")]
+        [StringLength(50, MinimumLength = 3, ErrorMessage ="more than 3 characters and less than 50")]
+        public string Email { get; set; }
+        public List<BookBorrowCustomer>? Customer_Borrow { get; set; }
        
 
     }

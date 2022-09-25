@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MVCLabb1</title>
+    <title>@ViewData["Title"] - MVCLabb1 Mattias Kokkonen</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MVCLabb1.styles.css" asp-append-version="true" />
@@ -16,26 +16,32 @@
 
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MVCLabb1</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Mattias Kokkonen - Labb1</a>
+                <div class="row">
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+
+                <div class="navbar-collapse collapse d-flex justify-content-center">
+                    <ul class="navbar-nav flex-grow-3">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Books">Books</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Books" asp-route-Id="@Context.GetRouteData().Values["Id"]"><i class="fa-solid fa-book-medical"></i>Books</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Costumer">Customer</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Costumer"><i class="fa-solid fa-person-circle-check"></i>Customer</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AddCostumer">Add Costumer</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AddCostumer"><i class="fa-solid fa-person-circle-plus"></i>Add Costumer</a>
+                        </li>
+                        <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Borrowed" asp-route-Id="@Context.GetRouteData().Values["Id"]"><i class="fa-solid fa-swatchbook"></i>Borrowed books</a>
                         </li>
                     </ul>
+                </div>
                 </div>
             </div>
         </nav>
@@ -49,7 +55,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2022 - MVCLabb1 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2022 - MVCLabb1 - Mattias Kokkonen
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

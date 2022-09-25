@@ -9,6 +9,7 @@ namespace MVCLabb1.Models
     {
        
         [Key]
+        [System.ComponentModel.DataAnnotations.Schema.DatabaseGenerat‌ed(System.ComponentM‌​odel.DataAnnotations‌​.Schema.DatabaseGeneratedOp‌​tion.None)]
         public int BorrowId { get; set; }
        
 
@@ -22,6 +23,8 @@ namespace MVCLabb1.Models
         public int BookId { get; set; }
         public Book Book { get; set; }
         public DateTime ReturnDate { get; set; }
+        public DateTime ReturnedToLibrary { get; set; }
+        public bool Returned { get; set; }
         public IEnumerable<Book> BookViewModel { get; set; }
         public IEnumerable<Customer> CustomerViewModel { get; set; }
     }

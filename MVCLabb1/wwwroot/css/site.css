@@ -14,8 +14,13 @@ html {
 }
 
 body {
+    color:wheat;
   margin-bottom: 60px;
+  background-color:black;
 }
 form {
     display: inline-block;
+}
+h4{
+    color: red;
 }

@@ -64,7 +64,7 @@ namespace MVCLabb1.Migrations
                         new
                         {
                             Id = 1,
-                            AmountInStore = 1,
+                            AmountInStore = 3,
                             BookISBN = "23468635",
                             BookPictureUrl = "https://papunet.net/sites/papunet.net/files/kuvapankki/20190807/kirja_vari.jpg",
                             Title = "Entity kursbook"
@@ -96,10 +96,26 @@ namespace MVCLabb1.Migrations
                         new
                         {
                             Id = 5,
-                            AmountInStore = 1,
+                            AmountInStore = 5,
                             BookISBN = "263563",
                             BookPictureUrl = "https://s1.adlibris.com/images/30710334/programmering-2-c.jpg",
                             Title = "C# programmering"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            AmountInStore = 5,
+                            BookISBN = "26253563",
+                            BookPictureUrl = "https://s1.adlibris.com/images/61264615/microsoft-visual-c-step-by-step.jpg",
+                            Title = "microsoft-visual-c"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            AmountInStore = 7,
+                            BookISBN = "11113563",
+                            BookPictureUrl = "https://s2.adlibris.com/images/27997673/programming-aspnet-core.jpg",
+                            Title = "programming aspnet core"
                         });
                 });
 
@@ -117,6 +133,12 @@ namespace MVCLabb1.Migrations
                     b.Property<DateTime>("ReturnDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("Returned")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ReturnedToLibrary")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("BorrowId", "CostumerId", "BookId");
 
                     b.HasIndex("BookId");
@@ -128,41 +150,49 @@ namespace MVCLabb1.Migrations
                     b.HasData(
                         new
                         {
-                            BorrowId = 0,
-                            CostumerId = 1,
-                            BookId = 1,
-                            ReturnDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
                             BorrowId = 1,
                             CostumerId = 1,
-                            BookId = 2,
-                            ReturnDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            BookId = 1,
+                            ReturnDate = new DateTime(2008, 3, 1, 7, 0, 0, 0, DateTimeKind.Unspecified),
+                            Returned = false,
+                            ReturnedToLibrary = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             BorrowId = 2,
-                            CostumerId = 3,
-                            BookId = 4,
-                            ReturnDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            CostumerId = 1,
+                            BookId = 2,
+                            ReturnDate = new DateTime(2018, 3, 1, 7, 0, 0, 0, DateTimeKind.Unspecified),
+                            Returned = false,
+                            ReturnedToLibrary = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             BorrowId = 3,
+                            CostumerId = 2,
+                            BookId = 4,
+                            ReturnDate = new DateTime(2022, 9, 1, 7, 0, 0, 0, DateTimeKind.Unspecified),
+                            Returned = false,
+                            ReturnedToLibrary = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            BorrowId = 4,
                             CostumerId = 3,
                             BookId = 2,
-                            ReturnDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            ReturnDate = new DateTime(2022, 9, 22, 17, 47, 49, 324, DateTimeKind.Local).AddTicks(4824),
+                            Returned = false,
+                            ReturnedToLibrary = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
             modelBuilder.Entity("MVCLabb1.Models.Customer", b =>
                 {
-                    b.Property<int>("CostumerId")
+                    b.Property<int?>("CostumerId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CostumerId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("CostumerId"), 1L, 1);
 
                     b.Property<int?>("BookBorrowCustomerBookId")
                         .HasColumnType("int");
@@ -172,6 +202,11 @@ namespace MVCLabb1.Migrations
 
                     b.Property<int?>("BookBorrowCustomerCostumerId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -196,6 +231,7 @@ namespace MVCLabb1.Migrations
                         new
                         {
                             CostumerId = 1,
+                            Email = "mattias@gmail.com",
                             FirstName = "Mattias",
                             LastName = "Kokkonen",
                             Phone = 70555555
@@ -203,6 +239,7 @@ namespace MVCLabb1.Migrations
                         new
                         {
                             CostumerId = 2,
+                            Email = "Nocco@nocco.com",
                             FirstName = "Edwin",
                             LastName = "Noccomannen",
                             Phone = 70444444
@@ -210,6 +247,7 @@ namespace MVCLabb1.Migrations
                         new
                         {
                             CostumerId = 3,
+                            Email = "vandra@vandra.se",
                             FirstName = "Daniel",
                             LastName = "Vandraren",
                             Phone = 7033333

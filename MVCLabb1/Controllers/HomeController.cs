@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Data.SqlClient.Server;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+//using MVCLabb1.Migrations;
 using MVCLabb1.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using System.Dynamic;
 using System.Linq;
 using System.Security.Policy;
 using System.Web;
@@ -40,9 +44,7 @@ namespace MVCLabb1.Controllers
         }
 
 
-        //[HttpPost]
-        //[Route("{Id:int}/{BookId:int}")]
-        //[ValidateAntiForgeryToken]
+        
         public async Task<IActionResult> BookBorrow(int Id, int BookId)
         {
             
@@ -56,28 +58,18 @@ namespace MVCLabb1.Controllers
 
             if (Id != 0 && BookId != 0)
             {
-                int latestId = 0;
-                int latestCheck = 0;
 
-                do
-                {                 
-                    var latstBorrower = await _bookBorrowDbContext.BookBorrowCustomers.FirstOrDefaultAsync(c => c.BorrowId == latestId);                   
-                    if (latestId == latstBorrower.BorrowId) 
-                    {
-                        latestId += 1;
-                    }
-                } while (latestCheck == latestId);
 
-                    BookBorrowCustomer borrower = new BookBorrowCustomer
+                BookBorrowCustomer borrower = new BookBorrowCustomer
                 {
-                    BorrowId = latestId,
+                    BorrowId = await generateId(),
                     CostumerId = Id,
                     BookId = BookId,
-                    ReturnDate = DateTime.Now,
+                    ReturnDate = DateTime.Now.AddMonths(1),
                 };
                 _bookBorrowDbContext.BookBorrowCustomers.Add(borrower);
                 await _bookBorrowDbContext.SaveChangesAsync();
-                return RedirectToAction("Books");
+                return RedirectToAction("Books",new { Id });
             }
             return NotFound("Error book and user not found.");
 
@@ -90,7 +82,7 @@ namespace MVCLabb1.Controllers
 
             _bookBorrowDbContext.Costumers.Remove(customer);
             await _bookBorrowDbContext.SaveChangesAsync();
-            return Ok("Customer deleted");
+            return RedirectToAction("Costumer");
 
         }
 
@@ -98,14 +90,14 @@ namespace MVCLabb1.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddCostumer([Bind("FirstName, LastName, Phone")] Customer customer)
+        public async Task<IActionResult> AddCostumer([Bind("FirstName, LastName, Phone, Email")] Customer customer)
         {
 
+            
 
-
-            if (customer.FirstName != null && customer.LastName != null && customer.Phone != 0)
+            if (ModelState.IsValid)
             {
-             
+                
                 _bookBorrowDbContext.Costumers.Add(customer);
                 await _bookBorrowDbContext.SaveChangesAsync();
                 return RedirectToAction("Costumer");
@@ -140,24 +132,75 @@ namespace MVCLabb1.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateCustomer([Bind("CostumerId, FirstName, LastName, Phone")] Customer customer)
+        public async Task<IActionResult> UpdateCustomer([Bind("CustomerId, FirstName, LastName, Phone, Email")] Customer customer,int Id)
         {
-           
-            if (customer != null)
-            {
 
+            if (ModelState.IsValid)
+            {
+                customer.CostumerId = Id;
                 _bookBorrowDbContext.Costumers.Update(customer);
                 await _bookBorrowDbContext.SaveChangesAsync();
 
-                return RedirectToAction("index");
+                return RedirectToAction("Costumer");
             }
             else
             {
-                return NotFound("Id not found");
+                ModelState.AddModelError("", "Error");
+                return View();
             }
         }
-     
 
-       
+        public async Task<IActionResult> BorrowedBooks(int? Id)
+        {
+            IEnumerable<BookBorrowCustomer> GroupingBorrowedBook = _bookBorrowDbContext.BookBorrowCustomers.Where(c => c.CostumerId == Id);
+
+            return View(GroupingBorrowedBook);
+
+        }
+        public async Task<IActionResult> Borrowed(int? Id)
+        {
+
+            dynamic Borrowing = new ExpandoObject();
+            Borrowing.Book = await _bookBorrowDbContext.Books.ToListAsync();
+            Borrowing.BorrowCust = _bookBorrowDbContext.BookBorrowCustomers.Where(c => c.CostumerId == Id);
+            return View(Borrowing);
+
+        }
+
+      public async Task<int> generateId()
+        {
+            Random rnd = new Random();
+            int newId = rnd.Next();
+            return await check(newId);
+        }
+        public async Task<int> check(int newId)
+        {
+
+            if(await _bookBorrowDbContext.Costumers.FirstOrDefaultAsync(f=>f.CostumerId ==newId) == null)
+            {
+                return (newId);
+            }
+            else
+            {
+                return await generateId();
+            }
+        }
+        public async Task<IActionResult> ReturnBook(int Id, int BookId, int BorrowId)
+        {
+
+            var bookamount = _bookBorrowDbContext.Books.Find(BookId);
+            bookamount.AmountInStore += 1;
+            _bookBorrowDbContext.Books.Update(bookamount);
+
+            var returnBook = await _bookBorrowDbContext.BookBorrowCustomers.FirstOrDefaultAsync(f=>f.BorrowId == BorrowId);
+            returnBook.ReturnedToLibrary = DateTime.Now;
+            returnBook.Returned = true;
+            _bookBorrowDbContext.BookBorrowCustomers.Update(returnBook);
+            
+                await _bookBorrowDbContext.SaveChangesAsync();
+                return RedirectToAction("Borrowed", new { Id });
+        }
+
+
     }
 }
